@@ -6,7 +6,7 @@ namespace GeekShopping.Web.Utils
     public static class HttpClientExtensions
     {
         private static MediaTypeHeaderValue contextType = new("application/json");
-        public static async Task<T> ReadContextAs<T>(this HttpResponseMessage response)
+        public static async Task<T> ReadContentAs<T>(this HttpResponseMessage response)
         {
             if (!response.IsSuccessStatusCode)
                 throw new ApplicationException($"Algo de errado aconteceu na chamada da API :{response.ReasonPhrase}");

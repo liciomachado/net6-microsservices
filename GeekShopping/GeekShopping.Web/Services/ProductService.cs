@@ -14,32 +14,32 @@ namespace GeekShopping.Web.Services
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 
-        public async Task<IEnumerable<ProductModel>> FindAllProducts(string token)
+        public async Task<IEnumerable<ProductViewModel>> FindAllProducts(string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _httpClient.GetAsync(BasePath);
-            return await response.ReadContextAs<List<ProductModel>>();
+            return await response.ReadContentAs<List<ProductViewModel>>();
         }
 
-        public async Task<ProductModel> FindProductById(long id, string token)
+        public async Task<ProductViewModel> FindProductById(long id, string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _httpClient.GetAsync($"{BasePath}/{id}");
-            return await response.ReadContextAs<ProductModel>();
+            return await response.ReadContentAs<ProductViewModel>();
         }
-        public async Task<ProductModel> CreateProduct(ProductModel productModel, string token)
+        public async Task<ProductViewModel> CreateProduct(ProductViewModel productModel, string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _httpClient.PostAsJson(BasePath, productModel);
-            if (response.IsSuccessStatusCode) return await response.ReadContextAs<ProductModel>();
+            if (response.IsSuccessStatusCode) return await response.ReadContentAs<ProductViewModel>();
             else throw new Exception("Algo de errado na chamada da api:");
         }
 
-        public async Task<ProductModel> UpdateProduct(ProductModel productModel, string token)
+        public async Task<ProductViewModel> UpdateProduct(ProductViewModel productModel, string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _httpClient.PutAsJson(BasePath, productModel);
-            if (response.IsSuccessStatusCode) return await response.ReadContextAs<ProductModel>();
+            if (response.IsSuccessStatusCode) return await response.ReadContentAs<ProductViewModel>();
             else throw new Exception("Algo de errado na chamada da api:");
         }
         public async Task<bool> DeleteProduct(long id, string token)
@@ -47,7 +47,7 @@ namespace GeekShopping.Web.Services
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _httpClient.DeleteAsync($"{BasePath}/{id}");
             if (response.IsSuccessStatusCode)
-                return await response.ReadContextAs<bool>();
+                return await response.ReadContentAs<bool>();
             else 
                 throw new Exception("Algo de errado aconteceu na chamada da API");
         }
