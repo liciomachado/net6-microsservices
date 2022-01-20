@@ -1,7 +1,6 @@
 using AutoMapper;
-using GeekShopping.CartAPI.Config;
-using GeekShopping.CartAPI.Model.Context;
-using GeekShopping.CartAPI.Repository;
+using GeekShopping.CouponAPI.Config;
+using GeekShopping.CouponAPI.Model.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -17,9 +16,9 @@ builder.Services.AddDbContext<MySQLContext>(options => options.UseMySql(connecti
 builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-builder.Services.AddScoped<ICartRepository, CartRepository>();
-
+//builder.Services.AddScoped<ICouponRepository, CouponRepository>();
 builder.Services.AddControllers();
+
 
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
@@ -38,12 +37,11 @@ builder.Services.AddAuthorization(options =>
         policy.RequireClaim("scope", "geek_shopping");
     });
 });
-
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "CouponAPI" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "CartAPI" });
     c.EnableAnnotations();
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -72,7 +70,6 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -81,6 +78,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
