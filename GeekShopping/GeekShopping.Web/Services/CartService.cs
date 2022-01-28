@@ -18,7 +18,7 @@ namespace GeekShopping.Web.Services
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _httpClient.PostAsJson($"{BasePath}/add-cart", cart);
-            if (response.IsSuccessStatusCode) 
+            if (response.IsSuccessStatusCode)
                 return await response.ReadContentAs<CartViewModel>();
             else throw new Exception("Algo de errado na chamada da api:");
         }
@@ -43,12 +43,14 @@ namespace GeekShopping.Web.Services
                 throw new Exception("Algo de errado aconteceu na chamada da API");
         }
 
-        public async Task<CartHeaderViewModel> Checkout(CartHeaderViewModel cartHeader, string token)
+        public async Task<object> Checkout(CartHeaderViewModel cartHeader, string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _httpClient.PostAsJson($"{BasePath}/checkout", cartHeader);
             if (response.IsSuccessStatusCode)
                 return await response.ReadContentAs<CartHeaderViewModel>();
+            else if (response.StatusCode.ToString().Equals("PrecondicitonFailed"))
+                return "Coupon Price has changed, please confirm!";
             else
                 throw new Exception("Algo de errado aconteceu na chamada da API");
         }
@@ -65,7 +67,7 @@ namespace GeekShopping.Web.Services
             return await response.ReadContentAs<CartViewModel>();
         }
 
-       
+
 
         public async Task<bool> RemoveFromCart(long cartId, string token)
         {
