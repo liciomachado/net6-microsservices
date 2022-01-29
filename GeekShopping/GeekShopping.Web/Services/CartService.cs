@@ -49,7 +49,7 @@ namespace GeekShopping.Web.Services
             var response = await _httpClient.PostAsJson($"{BasePath}/checkout", cartHeader);
             if (response.IsSuccessStatusCode)
                 return await response.ReadContentAs<CartHeaderViewModel>();
-            else if (response.StatusCode.ToString().Equals("PrecondicitonFailed"))
+            else if (response.StatusCode.ToString().Equals("PreconditionFailed"))
                 return "Coupon Price has changed, please confirm!";
             else
                 throw new Exception("Algo de errado aconteceu na chamada da API");
